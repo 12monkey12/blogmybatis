@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="mapper.TypeMapper">
+
+	<select id="getAllType" resultType="Type">
+		select tid, tname from type order by tid
+	</select>
+  	
+  	<update id="updateType">
+  		update type set tname = #{tname } where tid = #{tid }
+  	</update>
+  	
+</mapper>

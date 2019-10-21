@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="mapper.ContentMapper">
+
+	<resultMap type="Contents" id="contents" autoMapping="true">
+		<id property="cid" column="cid" />
+		<result property="desc" column="description" />
+	</resultMap>
+
+	<select id="getAllContents" parameterType="int" resultMap="contents">
+		<choose>
+			<when test="_parameter == '1'.toString()">
+				select contents.*,tname,uname from contents,user,type where contents.uid = user.uid and contents.tid = type.tid
+			</when>
+			<otherwise>
+				select contents.*,tname,uname from contents,user,type where contents.uid = user.uid and contents.tid = type.tid and contents.tid = #{_parameter}
+			</otherwise>
+		
+		</choose>
+	</select>
+	
+	<select id="getContentByPage" parameterType="map" resultMap="contents">
+		<!-- bind标签声明一个变量，可以使用算术运算符，解决limit不可以使用算术运算符的问题 -->
+		<bind name="final" value="(page - 1) * count"/>
+		
+		<choose>
+		
+			<when test="tid == '1'.toString()">
+				select contents.*,tname,uname from contents,user,type where contents.uid = user.uid and contents.tid = type.tid limit #{final },#{count }
+			</when>
+			<otherwise>
+				select contents.*,tname,uname from contents,user,type where contents.uid = user.uid and contents.tid = type.tid and type.tid = #{tid } limit #{final },#{count }
+			</otherwise>
+		
+		</choose>
+	</select>
+</mapper>
